@@ -1,0 +1,24 @@
+# Developer Profile & Environment Rules
+
+## Environment Stack
+- **OS**: Linux inside Windows Subsystem for Linux (WSL / Ubuntu)
+- **Primary Package & Env Manager**: uv (Astral)
+- **Frontend Package Manager**: yarn (Only if explicitly required by frontend tooling)
+- **Database**: PostgreSQL running exclusively inside Docker containers
+
+## Strict Command & Tooling Constraints
+1. **Never suggest global python or pip commands.** 
+   - Use `uv venv` to spin up virtual environments.
+   - Use `uv pip install <package>` or `uv add <package>` for package management.
+   - Do not suggest `pip install`, `poetry`, or `pipenv`.
+2. **Never suggest local PostgreSQL service management.** 
+   - Do not write commands for `sudo service postgresql start` or native `apt` postgresql installations.
+   - Always provide isolated `docker-compose.yml` configuration definitions for running a `postgres` container.
+   - Database connection URIs should default to targeting localhost/127.0.0.1 mapped container ports.
+3. **Handle WSL Terminal Quirks.**
+   - Ensure all network ports, mount paths, and executable environments assume a WSL network layout.
+   - If generating curl commands or installer URLs, ensure they are complete and syntactically flawless inside code blocks (avoid partial paths).
+
+## Project Architecture (Python API)
+- Project should be built cleanly around FastAPI.
+- Default to using `uv init` structures featuring `pyproject.toml` configuration files instead of legacy `requirements.txt` tracking unless requested.
